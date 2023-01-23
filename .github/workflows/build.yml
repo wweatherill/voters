@@ -36,5 +36,5 @@ jobs:
           role-duration-seconds: 900 # the ttl of the session, in seconds.
           aws-region: eu-west-2
       - name: Serverless deploy
-        run: sam deploy --stack-name sam-voter --s3-bucket me.weatherill.will.deployment.voters --capabilities CAPABILITY_IAM --region eu-west-2
+        run: sam deploy --on-failure DELETE --stack-name sam-voter --s3-bucket me.weatherill.will.deployment.voters --capabilities CAPABILITY_IAM --region eu-west-2
         
