@@ -25,9 +25,9 @@ jobs:
       - name: Build jar with Maven
         run: mvn -B package --file VotersFunction/pom.xml
       - name: Setup SAM
-        uses: aws-actions/setup-sam@v1        
-	  - name: Build container with SAM
-      - run: sam build --use-container        
+        uses: aws-actions/setup-sam@v1
+      - name: Build container with SAM
+      - run: sam build --use-container
       - name: configure aws credentials
           uses: aws-actions/configure-aws-credentials@v1
           with:
