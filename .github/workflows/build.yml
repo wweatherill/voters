@@ -27,7 +27,7 @@ jobs:
       - name: Setup SAM
         uses: aws-actions/setup-sam@v1
       - name: Build container with SAM
-      - run: sam build --use-container
+        run: sam build --use-container
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
