@@ -5,6 +5,7 @@ permissions:
   contents: read # required to checkout the code from the repo
 
 on:
+  workflow_dispatch:
   push:
     branches: [ master ]
     
