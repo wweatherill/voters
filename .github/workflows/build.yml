@@ -1,0 +1,39 @@
+name: Build, Test & Deploy
+
+permissions:
+  id-token: write # required to use OIDC authentication
+  contents: read # required to checkout the code from the repo
+
+on:
+  push:
+    branches: [ master ]
+    
+jobs:
+  build-deploy:
+  
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '19'
+          distribution: 'temurin'
+          cache: 'maven'
+      - name: Build jar with Maven
+        run: mvn -B package --file VotersFunction/pom.xml
+      - name: Setup SAM
+        uses: aws-actions/setup-sam@v1        
+	  - name: Build container with SAM
+      - run: sam build --use-container        
+      - name: configure aws credentials
+          uses: aws-actions/configure-aws-credentials@v1
+          with:
+            role-to-assume: ${{ secrets.AWS_LAMBDA_DEPLOYER_ARN }}
+            role-duration-seconds: 900 # the ttl of the session, in seconds.
+            aws-region: eu-west-2
+      - name: Serverless deploy
+      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name sam-voter --s3-bucket me.weatherill.will.deployment.voter --capabilities CAPABILITY_IAM --region eu-west-2
+        
