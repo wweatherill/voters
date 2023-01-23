@@ -10,19 +10,16 @@ Globals:
     Timeout: 20
     MemorySize: 128
     Tracing: Active
-  Api:
-    TracingEnabled: true
 
 Resources:
   VotersAPI:
       Type: AWS::Serverless::Api
       Properties:
-        StageName: Prod
-        Cors:
-          AllowMethods: "'GET,POST,OPTIONS'"
-          AllowHeaders: "'content-type'"
-          AllowOrigin: "'*'"
-          AllowCredentials: false
+        StageName: prod
+        Name: !Sub "voters-api-prod"
+        Variables:
+            LAMBDA_ALIAS: prod
+        TracingEnabled: true
 
   VotersFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -51,7 +48,7 @@ Outputs:
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   VotersApi:
     Description: "API Gateway endpoint URL for Prod stage for Voters function"
-    Value: !Sub "https://${VotersAPI}.execute-api.${AWS::Region}.amazonaws.com/Prod/voters/" 
+    Value: !Sub "https://${VotersAPI}.execute-api.${AWS::Region}.amazonaws.com/prod/voters/" 
   VotersFunction:
     Description: "Voters Lambda Function ARN"
     Value: !GetAtt VotersFunction.Arn
