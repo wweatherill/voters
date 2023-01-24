@@ -16,7 +16,7 @@ Globals:
             JAVA_TOOL_OPTIONS: -XX:+TieredCompilation -XX:TieredStopAtLevel=1    
 
 Resources:     
-    ListVotersFunction
+    ListVotersFunction:
         Type: AWS::Serverless::Function
         Properties:
             Handler: me.weatherill.will.voters.App::handleRequest
