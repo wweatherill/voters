@@ -7,43 +7,36 @@ Description: >
 
 Globals:
   Function:
-    Timeout: 20
-    MemorySize: 128
+    Timeout: 15
+    MemorySize: 512
     Tracing: Active
-
-Resources:
-
-  VotersFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-    Properties:
-      CodeUri: VotersFunction
-      Handler: me.weatherill.will.voters.App::handleRequest
-      Runtime: java11
-      Architectures:
-      - x86_64
-      MemorySize: 512
-      Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
+    Runtime: java11
+    Environment: 
         Variables:
-          PARAM1: VALUE
-          JAVA_TOOL_OPTIONS: -XX:+TieredCompilation -XX:TieredStopAtLevel=1 # More info about tiered compilation https://aws.amazon.com/blogs/compute/optimizing-aws-lambda-function-performance-for-java/
-      Events:
-        Voters:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-          Properties:
-            Path: /voters
-            Method: get
-            RestApiId: !Ref VotersAPI
+            JAVA_TOOL_OPTIONS: -XX:+TieredCompilation -XX:TieredStopAtLevel=1    
 
+Resources:     
+    ListVotersFunction
+        Type: AWS::Serverless::Function
+        Properties:
+            Handler: me.weatherill.will.voters.App::handleRequest
+            CodeUri: VotersFunction
+            Events:
+                ListAllApi:
+                    Type: Api
+                    Properties:
+                        Path: /voters
+                        Method: GET      
+            
 Outputs:
-  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
-  # Find out more about other implicit resources you can reference within SAM
-  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   VotersApi:
     Description: "API Gateway endpoint URL for Prod stage for Voters function"
     Value: !Sub "https://${VotersAPI}.execute-api.${AWS::Region}.amazonaws.com/prod/voters/" 
-  VotersFunction:
+  
+  ListVotersFunction:
     Description: "Voters Lambda Function ARN"
-    Value: !GetAtt VotersFunction.Arn
-  VotersFunctionIamRole:
-    Description: "Implicit IAM Role created for Voters function"
-    Value: !GetAtt VotersFunctionRole.Arn
+    Value: !GetAtt ListVotersFunction.Arn
+  
+  ListVotersFunctionIamRole:
+    Description: "Implicit IAM Role created for List Voters function"
+    Value: !GetAtt ListVotersFunctionRole.Arn
