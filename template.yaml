@@ -11,16 +11,6 @@ Globals:
     MemorySize: 128
     Tracing: Active
 
-Resources:
-  VotersAPI:
-      Type: AWS::Serverless::Api
-      Properties:
-        StageName: prod
-        Name: !Sub "voters-api-prod"
-        Variables:
-            LAMBDA_ALIAS: prod
-        TracingEnabled: true
-
   VotersFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
